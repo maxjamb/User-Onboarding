@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import * as yup from "yup";
@@ -9,7 +9,7 @@ const initialFormState = {
   name: "",
   email: "",
   password: "",
-  terms: ""
+  terms: false
 };
 
 const validationSchema = yup.object().shape({
@@ -22,15 +22,20 @@ const validationSchema = yup.object().shape({
     .string()
     .required("Must type a password with 6+ characters")
     .min(6),
-  terms: yup.boolean().required("Must Accept Terms and Conditions")
+  terms: yup
+    .boolean()
+    .required("Must Accept Terms and Conditions")
+    .oneOf([true], "Must Accept Terms and Conditions")
 });
 
 function App() {
-  const addPerson = form => {
+  const [users, setUsers] = useState([]);
+  const addPerson = (forValues, form) => {
     axios
-      .post("https://reqres.in/api/users_")
+      .post("https://reqres.in/api/users_", forValues)
       .then(res => {
         console.log(res);
+        setUsers([...users, res.data]);
         form.resetForm();
       })
       .catch(error => {
@@ -43,6 +48,7 @@ function App() {
         onSubmit={addPerson}
         initialValues={initialFormState}
         validationSchema={validationSchema}
+        users={users}
       />
     </div>
   );
