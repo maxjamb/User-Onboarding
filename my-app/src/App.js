@@ -1,24 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import * as yup from "yup";
+import Form from "./Components/Form";
+
+const initialFormState = {
+  name: "",
+  email: "",
+  password: "",
+  terms: ""
+};
+
+const validationSchema = yup.object.shape({
+  name: yup.string().required(),
+  email: yup
+    .string()
+    .email()
+    .required(),
+  password: yup.string().required(),
+  terms: yup.boolean().required()
+});
 
 function App() {
+  const addPerson = form => {};
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Form
+        onSubmit={addPerson}
+        initialValues={initialFormState}
+        validationSchema={validationSchema}
+      />
     </div>
   );
 }
