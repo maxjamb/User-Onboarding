@@ -21,7 +21,7 @@ const validationSchema = yup.object().shape({
   password: yup
     .string()
     .required("Must type a password with 6+ characters")
-    .length(6),
+    .min(6),
   terms: yup.boolean().required("Must Accept Terms and Conditions")
 });
 
